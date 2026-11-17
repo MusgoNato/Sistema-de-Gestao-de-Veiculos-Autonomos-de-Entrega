@@ -98,26 +98,14 @@ footer{margin-top:32px;font-size:12px;color:var(--muted);text-align:center}
     </div>
     <div class="field" id="f-pass">
       <label for="pass">Senha</label>
-      <input type="password" name="password" id="pass" placeholder="••••••••" autocomplete="current-password">
+      <input type="password" name="senha" id="pass" placeholder="••••••••" autocomplete="current-password">
       <div class="error">A senha deve ter pelo menos 6 caracteres.</div>
-    </div>
-
-    <div class="row">
-      <label><input type="checkbox" id="remember"> Manter conectado</label>
-      <a href="#">Esqueci a senha</a>
     </div>
 
     <button class="btn" id="submit" type="submit">
     <span class="spin"></span>
     <span id="btn-text">Acessar painel</span>
 </button>
-
-<div class="divider">OU</div>
-
-<a href="{{ route('register') }}" class="btn-ghost" 
-   style="display:block; text-align:center;">
-    Criar uma conta
-</a>
     <div class="msg" id="msg" role="status"></div>
     <footer class="mono">© 2026</footer>
   </form>

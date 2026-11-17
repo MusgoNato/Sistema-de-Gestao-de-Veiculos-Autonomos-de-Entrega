@@ -88,6 +88,7 @@ class AuthController extends Controller
        --------------------------------------------------------------- */
     public function login(Request $request)
     {
+
         $request->validate([
             'email' => 'required|email',
             'senha' => 'required|string',
@@ -112,6 +113,16 @@ class AuthController extends Controller
             'usuario_id'   => $usuario->id,
             'usuario_nome' => $usuario->nome,
         ]);
+
+        $perfis = DB::select(
+            'SELECT p.nome
+            FROM usuario_perfil_possui upp
+            JOIN perfil p ON p.id = upp.fk_perfil_id
+            WHERE upp.fk_usuario_id = ? AND upp.ativo = TRUE',
+            [$usuario->id]
+        );
+
+        session(['perfis' => array_column($perfis, 'nome')]);
 
         return redirect('/painel');
     }

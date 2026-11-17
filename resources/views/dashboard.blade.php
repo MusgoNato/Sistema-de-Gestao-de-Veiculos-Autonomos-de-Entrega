@@ -21,7 +21,7 @@ nav a{display:flex;justify-content:space-between;gap:8px;padding:8px 10px;border
 nav a:hover{background:var(--panel)}nav a.on{background:var(--panel);box-shadow:inset 2px 0 0 var(--accent)}
 nav a i{font-style:normal;color:var(--muted);font-size:10px;font-family:'JetBrains Mono',monospace}
 main{padding:24px 32px;min-width:0}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:16px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:16px;flex-wrap:wrap}
 header h1{font-size:26px;letter-spacing:-.02em}header p{color:var(--muted);font-size:13px;margin-top:4px}
 .user{display:flex;align-items:center;gap:10px;font-size:13px}
 .av{width:36px;height:36px;border-radius:50%;background:var(--accent-2);color:#0b0f14;display:grid;place-items:center;font-weight:700}
@@ -30,6 +30,9 @@ header h1{font-size:26px;letter-spacing:-.02em}header p{color:var(--muted);font-
 .card h3{font-size:14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
 .card h3 i{font-style:normal;color:var(--muted);font-size:11px;font-family:'JetBrains Mono',monospace}
 .kpi b{font-size:28px;display:block}.kpi small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.1em}
+.periodo{display:flex;align-items:end;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.periodo label{font-size:10px;text-transform:uppercase;letter-spacing:.08em}
+.periodo input{min-width:145px}
 .kpi em{font-style:normal;font-size:12px;color:var(--accent)}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{text-align:left;color:var(--muted);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.08em;padding:8px;border-bottom:1px solid var(--line)}
@@ -97,7 +100,7 @@ input:focus,select:focus{outline:none;border-color:var(--accent-2)}
     <div>
         <div class="uc">PAINEL</div>
         <h1>Visão geral</h1>
-        <p>Indicadores da operação</p>
+        <p>Indicadores da operação em {{ \Carbon\Carbon::parse($data)->format('d/m/Y') }}</p>
     </div>
     <div class="user">
         <div>
@@ -110,6 +113,12 @@ input:focus,select:focus{outline:none;border-color:var(--accent-2)}
         </form>
     </div>
 </header>
+<form class="periodo" method="GET" action="{{ route('dashboard') }}">
+    <label for="data">Consultar data
+        <input id="data" name="data" type="date" value="{{ $data }}" required>
+    </label>
+    <button type="submit" class="btn sm">Atualizar</button>
+</form>
   <section id="view">
   <div class="grid g4">
     <div class="card kpi">

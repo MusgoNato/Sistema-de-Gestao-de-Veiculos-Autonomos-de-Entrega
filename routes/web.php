@@ -2,14 +2,16 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\IndexController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\RestauranteController;
 use App\Http\Controllers\VeiculoController;
 use App\Http\Controllers\ViagemController;
 use Illuminate\Support\Facades\Route;
 
+
 /* Acesso */
-Route::get('/login', [AuthController::class, 'index'])->name('login');
+Route::get('/', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

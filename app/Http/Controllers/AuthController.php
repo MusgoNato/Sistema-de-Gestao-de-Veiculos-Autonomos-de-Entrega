@@ -7,78 +7,9 @@ use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
-    /* ---------------------------------------------------------------
-       Telas
-       --------------------------------------------------------------- */
-
     public function index()
     {
         return view('login');
-    }
-
-    public function indexcadastro()
-    {
-        return view('cadastro');
-    }
-
-    /* ---------------------------------------------------------------
-       UC17 - Cadastrar-se como cliente
-       Insere o usuario e associa o perfil Cliente (id 3) na mesma
-       transacao. Se qualquer insercao falhar, nada e gravado.
-       --------------------------------------------------------------- */
-    public function cadastrar(Request $request)
-    {
-
-        $dados = $request->validate([
-            'nome'      => 'required|string|max:100',
-            'email'     => 'required|email|max:50',
-            'data_nasc' => 'required|date|before:today',
-            'sexo'      => 'required|in:M,F',
-            'cpf'       => 'required|digits:11',
-            'senha'     => 'required|string|min:6|confirmed',
-        ], [
-            'senha.confirmed' => 'A confirmação da senha não confere.',
-        ]);
-
-        $duplicado = DB::selectOne(
-            'SELECT email, cpf FROM usuario WHERE email = ? OR cpf = ?',
-            [$dados['email'], $dados['cpf']]
-        );
-
-        if ($duplicado) {
-            $campo = $duplicado->email === $dados['email'] ? 'email' : 'cpf';
-            $mensagem = $campo === 'email'
-                ? 'Este e-mail já está cadastrado.'
-                : 'Este CPF já está cadastrado.';
-
-            return back()->withErrors([$campo => $mensagem])->withInput($request->except('senha', 'senha_confirmation'));
-        }
-
-        DB::transaction(function () use ($dados) {
-            $id = DB::selectOne('SELECT COALESCE(MAX(id), 0) + 1 AS novo_id FROM usuario')->novo_id;
-
-            DB::insert(
-                'INSERT INTO usuario (id, nome, email, data_nasc, sexo, cpf, ativo, senha)
-                 VALUES (?, ?, ?, ?, ?, ?, TRUE, ?)',
-                [
-                    $id,
-                    $dados['nome'],
-                    $dados['email'],
-                    $dados['data_nasc'],
-                    $dados['sexo'],
-                    $dados['cpf'],
-                    password_hash($dados['senha'], PASSWORD_BCRYPT),
-                ]
-            );
-
-            DB::insert(
-                'INSERT INTO usuario_perfil_possui (data_atribuicao, ativo, fk_perfil_id, fk_usuario_id)
-                 VALUES (CURRENT_TIMESTAMP, TRUE, 3, ?)',
-                [$id]
-            );
-        });
-
-        return redirect('/login')->with('sucesso', 'Cadastro realizado com sucesso. Faça login para continuar.');
     }
 
     /* ---------------------------------------------------------------
